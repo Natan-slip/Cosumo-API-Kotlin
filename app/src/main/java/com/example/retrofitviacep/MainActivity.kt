@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,18 +41,15 @@ class MainActivity : AppCompatActivity() {
         siglaEstado = findViewById(R.id.siglaEstado)
         btnBuscarCep = findViewById(R.id.btnBuscarCep)
 
-        // Configuração da RecyclerView
-        // * Inicialização da Rv e do Adapter
+        /*Configurando a recycler view e inicializando o adapter */
         rvCeps = findViewById(R.id.rv_ceps)
         cepsAdapter = CepsAdapter(this)
 
-        // * Determinar o layout da RV
-        rvCeps.layoutManager =
-                LinearLayoutManager(
-                    this,
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
+        //determinando o layout da Recycle View
+        rvCeps.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        /* definir o adapter da Recycle View */
+        rvCeps.adapter = cepsAdapter
 
         buttonBuscar.setOnClickListener{
 
@@ -66,9 +62,10 @@ class MainActivity : AppCompatActivity() {
             //Executar a chamada para a api
             call.enqueue(object : Callback<Cep> {
                 override fun onResponse(call: Call<Cep>, response: Response<Cep>) {
-                    val ceps = response.body()
 
-                    cepsAdapter.updateListaCeps(ceps)
+
+
+//                    textViewEndereco.text = ceps.toString()
                 }
 
                 override fun onFailure(call: Call<Cep>, t: Throwable) {
@@ -86,8 +83,13 @@ class MainActivity : AppCompatActivity() {
 
             call.enqueue(object : Callback<List<Cep>> {
                 override fun onResponse(call: Call<List<Cep>>, response: Response<List<Cep>>) {
-                    val cepList = response.body()
-                    tv_rua_cidade_estado.text = cepList.toString()
+//                    val cepList = response.body()
+
+                    val ceps = response.body()
+                    cepsAdapter.updateListaCeps(ceps!!)
+
+
+//                    tv_rua_cidade_estado.text = cepList.toString()
 
                 }
 
